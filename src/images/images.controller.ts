@@ -1,21 +1,33 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
+import { Controller, Get, Post, Body, Query, Patch, Param, Delete } from '@nestjs/common';
 import { ImagesService } from './images.service';
 import { CreateImageDto } from './dto/create-image.dto';
 import { UpdateImageDto } from './dto/update-image.dto';
-import { searchImg } from './entities/image.entity';
+import {searchImg } from './entities/image.entity';
 
 @Controller('images')
 export class ImagesController {
-  constructor(private readonly imagesService: ImagesService) {}
+  constructor(private readonly imagesService: ImagesService) { }
 
   @Get('/get-img')
   getImg() {
     return this.imagesService.getImg();
   }
-
   @Get('/img-search')
-  imgSearch(@Body() body:searchImg){
+  imgSearch(@Body() body: searchImg) {
     return this.imagesService.imgSearch(body);
   }
+  @Get('/img-info/:id')
+  imgInfo(@Param('id') id: number) {
+    return this.imagesService.imgInfo(id);
+  }
+  @Get('/img-cmt/:id')
+  imgCmt(@Param('id') id: number) {
+    return this.imagesService.imgCmt(id);
+  }
+  @Get('/img-save/:id')
+  infoSave(@Param('id') id: number) {
+    return this.imagesService.infoSave(id);
+  }
+
 
 }
