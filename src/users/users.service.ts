@@ -1,26 +1,32 @@
-import { Injectable } from '@nestjs/common';
+import { async } from 'rxjs';
+import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
+import { PrismaClient } from '@prisma/client';
 
 @Injectable()
 export class UsersService {
-  create(createUserDto: CreateUserDto) {
-    return 'This action adds a new user';
-  }
 
-  findAll() {
-    return `This action returns all users`;
-  }
+  private prisma = new PrismaClient()
 
-  findOne(id: number) {
-    return `This action returns a #${id} user`;
+  async getUser() {
+    const data =  await this.prisma.nguoi_dung.findMany()
+    throw new HttpException({ data }, HttpStatus.ACCEPTED)
   }
-
-  update(id: number, updateUserDto: UpdateUserDto) {
-    return `This action updates a #${id} user`;
+  async imgUserSave(id: number){
+    const data = await this.prisma.luu_anh.findFirst({
+      where:{
+        nguoi_dung_id: Number(id)
+      }
+    })
+    return data
   }
-
-  remove(id: number) {
-    return `This action removes a #${id} user`;
+  async imgUserCreate(id: number){
+    const data = await this.prisma.hinh_anh.findFirst({
+      where:{
+        nguoi_dung_id: Number(id)
+      }
+    })
+    return data
   }
 }
