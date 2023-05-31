@@ -29,4 +29,32 @@ export class UsersService {
     })
     return data
   }
+  async delImg(id: number){
+    const data = await this.prisma.hinh_anh.deleteMany({
+      where:{
+        nguoi_dung_id: Number(id)
+      }
+    })
+    return data
+  }
+  async uploadAvt(id: number, file: Express.Multer.File){
+    
+    //lưu hình
+    //lấy thông tin user muốn lưu theo userid
+    let getUserId = await this.prisma.nguoi_dung.findFirst({
+        where:{
+          nguoi_dung_id: Number(id)
+        }
+    })
+    getUserId.anh_dai_dien = file.filename;
+    //gọi truy vấn lưu hình
+
+    await this.prisma.nguoi_dung.update({
+        data: getUserId,where:{
+          nguoi_dung_id: Number(id)
+        }
+    })
+
+    return "upload thành công";
+}
 }
