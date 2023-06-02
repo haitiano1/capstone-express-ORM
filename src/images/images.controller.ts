@@ -1,9 +1,11 @@
-import { Controller, Get, Post, Body, Query, Patch, Param, Delete } from '@nestjs/common';
+import { Controller, Get, Post, Body, Query, Patch, Param, Delete, UseGuards } from '@nestjs/common';
 import { ImagesService } from './images.service';
 import { CreateImageDto } from './dto/create-image.dto';
 import { UpdateImageDto } from './dto/update-image.dto';
 import {searchImg } from './entities/image.entity';
+import { AuthGuard } from '@nestjs/passport';
 
+@UseGuards(AuthGuard("jwt"))
 @Controller('images')
 export class ImagesController {
   constructor(private readonly imagesService: ImagesService) { }

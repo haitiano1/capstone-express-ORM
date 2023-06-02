@@ -1,10 +1,13 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete, UseInterceptors, UploadedFile} from '@nestjs/common';
+import { Controller, Get, Post,Put, Body, Patch,Request, Param, Delete, UseInterceptors, UploadedFile, UseGuards} from '@nestjs/common';
 import { UsersService } from './users.service';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { diskStorage } from 'multer';
+import { nguoi_dung } from '@prisma/client';
+import { AuthGuard } from '@nestjs/passport';
 
+@UseGuards(AuthGuard("jwt"))
 @Controller('users')
 export class UsersController {
   constructor(private readonly usersService: UsersService) {}
@@ -37,5 +40,9 @@ export class UsersController {
   @Param('id') id: number
   ){
     return this.usersService.uploadAvt(id, file);
+  }
+  @Put('/update-user')
+  updateUser(@Body() body: nguoi_dung) {
+    return this.usersService.updateUser(body)
   }
 }
